@@ -1,0 +1,49 @@
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    // 手順１
+    // 　このファイルを、tomcatのwebappsフォルダの中に移動する
+    // 手順２
+    // 　↓ここの http://localhost:8080/index.java と書かれたところを、
+    // 　サーバ用のservletファイルのパスに置き換える
+    // 手順３
+    // 　http://localhost:8080/postJSON.html  を開く
+    // 手順４
+    // 　ここをクリックするとPOSTします  をクリックする
+    const serverPath = "jsonTest"
+
+    const request = [
+      {
+        item: "りんご",
+        num: 17
+      }, {
+        item: "みかん",
+        num: 208
+      }
+    ];
+
+    window.onload = () => {
+      $("#post").click(() => {
+        $("#result").append("<tr><td>" + JSON.stringify(request) + "</td></tr>")
+        $.ajax({                            // データ送信
+          type: "POST",                     // GET or POST
+          url: serverPath,                  // 宛先servletのパス
+          data: {requestJs : JSON.stringify(request)},    // 送信データ
+          dataType: "JSON"                  // servletから受信するデータの形式
+        }).done(function (data, status, xhr) {
+          $.each(data, function (key, val) {
+            $("#result").append("<tr><td>" + key + "</td><td>" + val + "</td></tr>")
+          });
+        });
+        return false;
+      });
+    }
+
+  </script>
+</head>
+
+<body>
+  <a id="post" href="">ここをクリックするとPOSTします</a>
+  <table border='1' id="result"> </table>
+</body>
